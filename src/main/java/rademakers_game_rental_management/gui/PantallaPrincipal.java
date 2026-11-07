@@ -17,6 +17,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName());
     
+    //private JPnlRegistrarUsuari pnlRegistrarUsuari;
+    private PantallaRegistrarUsuari dlgRegistrarUsuari;
     
     /**
      * Creates new form PantallaPrincipal
@@ -24,10 +26,15 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     public PantallaPrincipal() {
         initComponents();
         
-        setSize(600, 400); // Tamany de la finestra
+        setSize(700, 400); // Tamany de la finestra
         setLocationRelativeTo(null);  // Centrar la finestra a la pantalla
         
         resfrescarTaula();
+        
+        /*pnlRegistrarUsuari = new JPnlRegistrarUsuari();
+        pnlRegistrarUsuari.setBounds(200, 50, 400, 300);
+        getContentPane().add(pnlRegistrarUsuari);
+        */
     }
 
     /**
@@ -130,9 +137,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuUsuariEsborrarActionPerformed
 
     private void mnuUsuariCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsuariCrearActionPerformed
-        // TODO add your handling code here:
-        
+        // Obra la finestra per registrar un nou usuari
+        PantallaRegistrarUsuari registreUsuari = new PantallaRegistrarUsuari(this, true);
+        registreUsuari.setLocationRelativeTo(this);
+        registreUsuari.setSize(500, 350);
+        registreUsuari.setVisible(true);
     }//GEN-LAST:event_mnuUsuariCrearActionPerformed
+
+                                             
 
     /**
      * @param args the command line arguments

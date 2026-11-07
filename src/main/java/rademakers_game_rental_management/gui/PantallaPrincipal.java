@@ -16,9 +16,7 @@ import rademakers_game_rental_management.objectes.Usuari;
 public class PantallaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PantallaPrincipal.class.getName());
-    
-    //private JPnlRegistrarUsuari pnlRegistrarUsuari;
-    private PantallaRegistrarUsuari dlgRegistrarUsuari;
+
     
     /**
      * Creates new form PantallaPrincipal
@@ -29,12 +27,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         setSize(700, 400); // Tamany de la finestra
         setLocationRelativeTo(null);  // Centrar la finestra a la pantalla
         
-        resfrescarTaula();
+        refrescarTaula();
         
-        /*pnlRegistrarUsuari = new JPnlRegistrarUsuari();
-        pnlRegistrarUsuari.setBounds(200, 50, 400, 300);
-        getContentPane().add(pnlRegistrarUsuari);
-        */
     }
 
     /**
@@ -115,7 +109,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void resfrescarTaula() {
+    private void refrescarTaula() {
          DefaultTableModel dtm = new DefaultTableModel();
          dtm.setColumnIdentifiers(new String[]{"Nom", "Llinatge 1", "Llinatge 2", "DNI", "Telèfon", "Data Registre"});
          
@@ -138,10 +132,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void mnuUsuariCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsuariCrearActionPerformed
         // Obra la finestra per registrar un nou usuari
-        PantallaRegistrarUsuari registreUsuari = new PantallaRegistrarUsuari(this, true);
+        PantallaRegistrarUsuari registreUsuari = new PantallaRegistrarUsuari(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
         registreUsuari.setLocationRelativeTo(this);
         registreUsuari.setSize(500, 350);
         registreUsuari.setVisible(true);
+        
+        // Actualitza la taula quan es tanca la finestra
+        refrescarTaula();
     }//GEN-LAST:event_mnuUsuariCrearActionPerformed
 
                                              

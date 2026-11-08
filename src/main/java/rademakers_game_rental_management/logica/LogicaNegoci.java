@@ -16,34 +16,37 @@ public class LogicaNegoci {
     private static List<Usuari> usuaris = new ArrayList<>();
     
     public static void afegirUsuari(Usuari usuari) {
-        usuaris.add(usuari);
+        if (!usuaris.contains(usuari)) {
+            usuaris.add(usuari);
+        }else{
+            System.out.println("Aquest usuari ja existeix al sistema.");
+        }
     }
     
-    public static Usuari cercarUsuari (String nomUsuari) {
+    public static Usuari cercarUsuari (String dni) {
         //Aquest mètode (només) torna la primera coincidència del nom.
         for (Usuari usuari:usuaris) {
             try {
-                if (usuari.getNomUsuari().equalsIgnoreCase(nomUsuari)) {
+                if (usuari.getDni().equalsIgnoreCase(dni)) {
                     return usuari;
                 }  
             }catch (Exception e) {
-                System.out.println("No s'ha trobat aquest usuari:\n" + nomUsuari);
+                System.out.println("No s'ha trobat l'usuari amb DNI " + dni + ".");
             }
         }
         return null;
     }
     
-    public static String esborrarUsuari (Usuari usuari) {
+    public static Usuari esborrarUsuari (Usuari usuari) {
         
-        String nomUsuari= usuari.getNomUsuari();
-        
-        if (usuaris.contains(usuari)){
-            usuaris.remove(usuari);
-            return "S'ha esborrat aquest usuari correctament:\n"+ nomUsuari;
-        }else{
-            return "No s'ha trobat aquest usuari:\n" + nomUsuari;
+        for (Usuari u : usuaris) {
+
+            if (u.getDni().equalsIgnoreCase(usuari.getDni())) {
+                return u;
+            }
         }
-        
+
+        return null;
     }
 
     public static List<Usuari> getUsuaris() {

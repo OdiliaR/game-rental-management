@@ -7,6 +7,7 @@ package rademakers_game_rental_management.gui;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import rademakers_game_rental_management.logica.LogicaNegoci;
+import rademakers_game_rental_management.objectes.Joc;
 import rademakers_game_rental_management.objectes.Usuari;
 
 /**
@@ -26,8 +27,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         
         setSize(700, 400); // Tamany de la finestra
         setLocationRelativeTo(null);  // Centrar la finestra a la pantalla
-        
-        refrescarTaula();
+        jTable.setVisible(false);
         
     }
 
@@ -41,7 +41,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableUsuaris = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         mnuBar = new javax.swing.JMenuBar();
         mnuLloguer = new javax.swing.JMenu();
         mnuLloguerRegistrar = new javax.swing.JMenuItem();
@@ -56,7 +56,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
-        jTableUsuaris.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -67,7 +67,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTableUsuaris);
+        jScrollPane1.setViewportView(jTable);
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(10, 10, 640, 260);
@@ -98,9 +98,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         mnuJoc.setText("Joc");
 
         mnuJocCrear.setText("Crear");
+        mnuJocCrear.addActionListener(this::mnuJocCrearActionPerformed);
         mnuJoc.add(mnuJocCrear);
 
         mnuJocEsborrar.setText("Esborrar");
+        mnuJocEsborrar.addActionListener(this::mnuJocEsborrarActionPerformed);
         mnuJoc.add(mnuJocEsborrar);
 
         mnuBar.add(mnuJoc);
@@ -109,17 +111,28 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void refrescarTaula() {
-         DefaultTableModel dtm = new DefaultTableModel();
-         dtm.setColumnIdentifiers(new String[]{"Nom", "Llinatge 1", "Llinatge 2", "DNI", "Telèfon", "Data Registre"});
-         
-         List<Usuari> usuaris = LogicaNegoci.getUsuaris();
-         
-         for(Usuari usuari:usuaris) {
-             dtm.addRow(usuari.toArrayString());
-         }
-         
-         jTableUsuaris.setModel(dtm);      
+    
+    private void mostrarTaulaUsuaris() {
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.setColumnIdentifiers(new String[]{"Nom", "Llinatge 1", "Llinatge 2", "DNI", "Telèfon", "Data Registre"});
+
+        List<Usuari> usuaris = LogicaNegoci.getUsuaris();
+
+        for (Usuari usuari : usuaris) {
+            dtm.addRow(usuari.toArrayString());
+        }
+        jTable.setModel(dtm);
+    }
+    private void mostrarTaulaJocs() {
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.setColumnIdentifiers(new String[]{"Nom", "Gènere", "PS5", "Xbox", "PC", "Switch 2"});
+
+        List<Joc> jocs = LogicaNegoci.getJocs();
+
+        for (Joc joc : jocs) {
+            dtm.addRow(joc.toArrayString());
+        }
+        jTable.setModel(dtm);
     }
     private void mnuLloguerRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLloguerRegistrarActionPerformed
         // TODO add your handling code here:
@@ -127,10 +140,23 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuLloguerRegistrarActionPerformed
 
     private void mnuUsuariEsborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsuariEsborrarActionPerformed
-        // TODO add your handling code here:
+        jTable.setVisible(true);
+        mostrarTaulaUsuaris();
+        
+        // Obra la finestra per esborrar un usuari
+        PantallaEsborrarUsuari esborrarUsuari = new PantallaEsborrarUsuari(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
+        esborrarUsuari.setLocationRelativeTo(this);
+        esborrarUsuari.setSize(500, 350);
+        esborrarUsuari.setVisible(true);
+        
+        // Actualitza la taula quan es tanca la finestra
+        mostrarTaulaUsuaris();
     }//GEN-LAST:event_mnuUsuariEsborrarActionPerformed
 
     private void mnuUsuariCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsuariCrearActionPerformed
+        jTable.setVisible(true);
+        mostrarTaulaUsuaris();
+
         // Obra la finestra per registrar un nou usuari
         PantallaRegistrarUsuari registreUsuari = new PantallaRegistrarUsuari(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
         registreUsuari.setLocationRelativeTo(this);
@@ -138,8 +164,38 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         registreUsuari.setVisible(true);
         
         // Actualitza la taula quan es tanca la finestra
-        refrescarTaula();
+        mostrarTaulaUsuaris();
     }//GEN-LAST:event_mnuUsuariCrearActionPerformed
+
+    private void mnuJocEsborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuJocEsborrarActionPerformed
+        //Mostram la taula de jocs
+        jTable.setVisible(true);
+        mostrarTaulaJocs();
+
+        // Obra la finestra per esborrar un joc
+        PantallaEsborrarJoc esborrarJoc = new PantallaEsborrarJoc(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
+        esborrarJoc.setLocationRelativeTo(this);
+        esborrarJoc.setSize(500, 350);
+        esborrarJoc.setVisible(true);
+        
+        //Refrescam les dades a la taula
+        mostrarTaulaJocs();
+    }//GEN-LAST:event_mnuJocEsborrarActionPerformed
+
+    private void mnuJocCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuJocCrearActionPerformed
+        //Mostram la taula de jocs
+        jTable.setVisible(true);
+        mostrarTaulaJocs();
+        
+        // Obra la finestra per registrar un joc nou
+        PantallaCrearJoc crearJoc = new PantallaCrearJoc(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
+        crearJoc.setLocationRelativeTo(this);
+        crearJoc.setSize(500, 350);
+        crearJoc.setVisible(true);
+        
+        //Refrescam les dades a la taula
+        mostrarTaulaJocs();
+    }//GEN-LAST:event_mnuJocCrearActionPerformed
 
                                              
 
@@ -170,7 +226,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableUsuaris;
+    private javax.swing.JTable jTable;
     private javax.swing.JMenuBar mnuBar;
     private javax.swing.JMenu mnuJoc;
     private javax.swing.JMenuItem mnuJocCrear;

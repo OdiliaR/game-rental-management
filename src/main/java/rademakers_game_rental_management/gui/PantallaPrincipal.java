@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import rademakers_game_rental_management.logica.LogicaNegoci;
 import rademakers_game_rental_management.objectes.Joc;
+import rademakers_game_rental_management.objectes.Lloguer;
 import rademakers_game_rental_management.objectes.Usuari;
 
 /**
@@ -79,6 +80,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         mnuLloguer.add(mnuLloguerRegistrar);
 
         mnuLloguerTornar.setText("Tornar");
+        mnuLloguerTornar.addActionListener(this::mnuLloguerTornarActionPerformed);
         mnuLloguer.add(mnuLloguerTornar);
 
         mnuBar.add(mnuLloguer);
@@ -134,8 +136,32 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         }
         jTable.setModel(dtm);
     }
+    
+    private void mostrarTaulaLloguers() {
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.setColumnIdentifiers(new String[]{"Registre", "Usuari", "Joc", "Plataforma", "Inici", "Tornada"});
+
+        List<Lloguer> lloguers = LogicaNegoci.getLloguers();
+
+        for (Lloguer lloguer : lloguers) {
+            dtm.addRow(lloguer.toArrayString());
+        }
+        jTable.setModel(dtm);
+    }
+    
+    
     private void mnuLloguerRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLloguerRegistrarActionPerformed
-        // TODO add your handling code here:
+        jTable.setVisible(true);
+        mostrarTaulaLloguers();
+
+        // Obra la finestra per registrar un lloguer
+        PantallaRegistrarLloguer registreLloguer = new PantallaRegistrarLloguer(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
+        registreLloguer.setLocationRelativeTo(this);
+        registreLloguer.setSize(700, 500);
+        registreLloguer.setVisible(true);
+        
+        // Actualitza la taula quan es tanca la finestra
+        mostrarTaulaLloguers();
         
     }//GEN-LAST:event_mnuLloguerRegistrarActionPerformed
 
@@ -196,6 +222,20 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         //Refrescam les dades a la taula
         mostrarTaulaJocs();
     }//GEN-LAST:event_mnuJocCrearActionPerformed
+
+    private void mnuLloguerTornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLloguerTornarActionPerformed
+        jTable.setVisible(true);
+        mostrarTaulaLloguers();
+
+        // Obra la finestra per tornar un lloguer
+        PantallaTornarLloguer tornaLloguer = new PantallaTornarLloguer(this, true); //La pantalla principal espera fins què es tanqui el dialeg de registre
+        tornaLloguer.setLocationRelativeTo(this);
+        tornaLloguer.setSize(500, 350);
+        tornaLloguer.setVisible(true);
+        
+        // Actualitza la taula quan es tanca la finestra
+        mostrarTaulaLloguers();
+    }//GEN-LAST:event_mnuLloguerTornarActionPerformed
 
                                              
 
